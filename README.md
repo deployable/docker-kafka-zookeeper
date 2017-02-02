@@ -1,5 +1,7 @@
 # Kafka + Zookeeper in Docker
 
+https://hub.docker.com/r/deployable/kafka/
+
 ## Compose
 
 The quickest way is to launch with the included compose file
@@ -37,4 +39,5 @@ If you want kafka to advertise an address other than localhost, set  the
       --detach \
       deployable/kafka \
       kafka
+
 
