@@ -1,0 +1,50 @@
+version: "2.1"
+
+services:
+
+  zookeeper:
+    #build: .
+    image: deployable/kafka:latest
+    command: zookeeper
+    ports:
+     - "2181:2181"
+    networks:
+     - etc
+    healthcheck:
+      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  kafka:
+    ##build: .
+    image: deployable/kafka:latest
+    command: kafka
+    ports:
+     - "9092:9092"
+    networks:
+     - etc
+    depends_on:
+      - zookeeper
+    healthcheck:
+      test: ["CMD", "/kafka/check.sh", "kafka" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+
+  kafka-setup:
+    ##build: .
+    image: deployable/kafka:latest
+    command: setup
+    networks:
+     - etc
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_TOPIC: my-test-topic
+
+networks:
+  etc:
+    driver: bridge
+
