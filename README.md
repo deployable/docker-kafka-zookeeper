@@ -2,6 +2,15 @@
 
 https://hub.docker.com/r/deployable/kafka/
 
+## Versions
+
+OpenJRE 8
+Scala 2.11
+Kafka 0.10.1.0 
+Image 0
+
+Docker Tag: 8-2.11-0.10.1.0-0
+
 ## Compose
 
 The quickest way is to launch with the included compose file
