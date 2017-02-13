@@ -35,7 +35,7 @@ Run zookeeper
 Run kafka
 
     docker run --net=zk \
-      -publish 9092:9092/tcp \
+      --publish 9092:9092/tcp \
       --detach \
       deployable/kafka \
       kafka

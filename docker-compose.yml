@@ -20,14 +20,15 @@ services:
     ##build: .
     image: deployable/kafka:latest
     command: kafka
-    envronment:
+    environment:
       ADVERTISE_LISTENERS: 'localhost:9092'
     ports:
      - "9092:9092"
     networks:
      - etc
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "/kafka/check.sh", "kafka" ]
       interval: 30s
