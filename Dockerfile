@@ -27,7 +27,8 @@ ARG KAFKA_VERSION=0.11.0.1
 ARG SCALA_VERSION=2.12
 
 RUN set -uex; \
-    cd /tmp; \
+    mkdir -p /install; \
+    cd /install; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
     wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
@@ -38,7 +39,7 @@ RUN set -uex; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
-    rm -rf /tmp/;
+    rm -rf /install;
 
 # server.properties zookeeper.properties log4j.properties
 COPY ./config /kafka/config
