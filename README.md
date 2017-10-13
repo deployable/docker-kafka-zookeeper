@@ -1,6 +1,7 @@
 # Kafka + Zookeeper in Docker
 
 https://hub.docker.com/r/deployable/kafka/
+https://github.com/deployable/docker-kafka-zookeeper
 
 ## Versions
 
