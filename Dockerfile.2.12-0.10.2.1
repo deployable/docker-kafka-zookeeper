@@ -14,7 +14,8 @@ RUN set -uex; \
       "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
     \
     # verify the signature
-    export GNUPGHOME="$(mktemp -d)"; \
+    mkdir -p -m 700 /install/gpg; \
+    export GNUPGHOME="/install/gpg"; \
     gpg --keyserver pgpkeys.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
@@ -27,13 +28,13 @@ ARG KAFKA_VERSION=0.10.2.1
 ARG SCALA_VERSION=2.12
 
 RUN set -uex; \
-    mkdir -p /install; \
+    mkdir -p -m 700 /install/gpg; \
     cd /install; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
     wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
     #wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
-    export GNUPGHOME="$(mktemp -d)"; \
+    export GNUPGHOME="/install/gpg"; \
     gpg --keyserver pgpkeys.mit.edu --recv-key 73855CE2D0A67B5A; \
     gpg --keyserver pgpkeys.mit.edu --recv-key BA1CBB7D4C0D222CCF8A5C844B606607518830CF; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
