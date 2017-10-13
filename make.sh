@@ -20,13 +20,20 @@ fi
 cd "$rundir"
 
 run_build(){
-  run_template 2.12 0.10.2.1
-  docker build -f Dockerfile.2.12-0.10.2.1 -t $IMG_TAG:2.12-0.10.2.1 .
-  run_template 2.12 0.11.0.1
-  docker build -f Dockerfile.2.12-0.11.0.1 -t $IMG_TAG:2.12-0.11.0.1 .
+  run_build_version 2.12 0.10.2.1
+  run_build_version 2.12 0.11.0.1
   cp Dockerfile.2.12-0.11.0.1 Dockerfile
   docker build -f Dockerfile -t $IMG_TAG:latest .
 }
+
+run_build_version(){
+  build_scala_version=$1
+  build_kafka_version=$2
+  build_version=$build_scala_version-$build_kafka_version
+  run_template $build_scala_version $build_kafka_version
+  docker build -f Dockerfile.$build_version -t $IMG_TAG:$build_version .
+}  
+
 
 run_template(){
   template_scala_version=$1
@@ -45,7 +52,7 @@ run_help(){
   awk '/  ".*"/{ print "  "substr($1,2,length($1)-3) }' make.sh
 }
 
-set +x
+set -x
 
 case $cmd in
   "build")     run_build "$@";;

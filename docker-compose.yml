@@ -3,7 +3,6 @@ version: "2.1"
 services:
 
   zookeeper:
-    #build: .
     image: deployable/kafka:latest
     command: zookeeper
     ports:
@@ -13,9 +12,9 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+#      start_period: 10s
 
   kafka:
-    ##build: .
     image: deployable/kafka:latest
     command: kafka
     environment:
@@ -30,10 +29,9 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-
+#      start_period: 20s
 
   kafka-setup:
-    ##build: .
     image: deployable/kafka:latest
     command: setup
     depends_on:
