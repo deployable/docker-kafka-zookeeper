@@ -2,11 +2,6 @@
 
 set -uex
 
-if [ -z "$PORT" ]; then
-  echo "I need a PORT to test"
-  exit 1
-fi
-
 if [ "$1" == "kafka" ]; then 
   PORT=9092
   res=$(echo ruok | nc localhost $PORT)
