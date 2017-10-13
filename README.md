@@ -1,16 +1,17 @@
 # Kafka + Zookeeper in Docker
 
-https://hub.docker.com/r/deployable/kafka/
-https://github.com/deployable/docker-kafka-zookeeper
+[hub - `deployable/kafka`](https://hub.docker.com/r/deployable/kafka/)
+[github - `deployable/docker-kafka-zookeeper`](https://github.com/deployable/docker-kafka-zookeeper)
 
-## Versions
+## Tags
 
-OpenJRE 8
-Scala 2.11
-Kafka 0.10.1.0 
-Image 0
-
-Docker Tag: 8-2.11-0.10.1.0-0
+```
+2.11-0.11.0.1
+2.11-0.10.2.1
+2.12-0.10.2.1  0.10.2.1
+2.12-0.11.0.1  0.11.0.1  latest
+```
+All images are based on `openjdk:8-jre`
 
 ## Compose
 
