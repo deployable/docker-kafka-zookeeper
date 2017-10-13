@@ -5,12 +5,25 @@
 
 ## Tags
 
+### Latest
 ```
-2.11-0.11.0.1
-2.11-0.10.2.1
-2.12-0.10.2.1  0.10.2.1
-2.12-0.11.0.1  0.11.0.1  latest
+deployable/kafka:latest
 ```
+
+### Latest Scala
+```
+deployable/kafka:0.10.2.1
+deployable/kafka:0.11.0.1
+```
+
+### Specific versions
+```
+deployable/kafka:2.11-0.11.0.1
+deployable/kafka:2.11-0.10.2.1
+deployable/kafka:2.12-0.10.2.1
+deployable/kafka:2.12-0.11.0.1
+```
+
 All images are based on `openjdk:8-jre`
 
 ## Compose
