@@ -8,8 +8,6 @@ services:
     command: zookeeper
     ports:
      - "2181:2181"
-    networks:
-     - etc
     healthcheck:
       test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
       interval: 30s
@@ -24,8 +22,6 @@ services:
       ADVERTISE_LISTENERS: 'localhost:9092'
     ports:
      - "9092:9092"
-    networks:
-     - etc
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -40,14 +36,9 @@ services:
     ##build: .
     image: deployable/kafka:latest
     command: setup
-    networks:
-     - etc
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     environment:
       KAFKA_TOPIC: my-test-topic
-
-networks:
-  etc:
-    driver: bridge
 
