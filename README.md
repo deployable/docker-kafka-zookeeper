@@ -1,7 +1,7 @@
 # Kafka + Zookeeper in Docker
 
-[hub - `deployable/kafka`](https://hub.docker.com/r/deployable/kafka/)
-[github - `deployable/docker-kafka-zookeeper`](https://github.com/deployable/docker-kafka-zookeeper)
+- [Docker hub - `deployable/kafka`](https://hub.docker.com/r/deployable/kafka/)
+- [Github - `deployable/docker-kafka-zookeeper`](https://github.com/deployable/docker-kafka-zookeeper)
 
 ## Tags
 
