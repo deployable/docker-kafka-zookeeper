@@ -1,9 +1,21 @@
 FROM openjdk:8-jre
 
 RUN set -uex; \
+    echo 'precedence ::ffff:0:0/96  100' > /etc/gai.conf; \
     apt-get update; \
     apt-get install netcat-openbsd wget ca-certificates xxd -y; \
     apt-get clean;
+
+# gpg key servers are flakey :/
+RUN for key in \
+      B42F6819007F00F88E364FD4036A9C25BF357DD4 \
+      73855CE2D0A67B5A \
+      BA1CBB7D4C0D222CCF8A5C844B606607518830CF; \
+    do \
+      gpg --keyserver keys.gnupg.net --recv-keys $key \
+        || gpg --keyserver pgp.mit.edu --recv-keys $key \
+        || gpg --keyserver ha.pool.sks-keyservers.net --recv-keys $key; \
+    done
 
 ENV GOSU_VERSION 1.10
 RUN set -uex; \
@@ -12,14 +24,8 @@ RUN set -uex; \
         "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
     wget -O /usr/local/bin/gosu.asc --progress=dot:giga \
       "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-    \
-    # verify the signature
-    mkdir -p -m 700 /install/gpg; \
-    export GNUPGHOME="/install/gpg"; \
-    gpg --keyserver pgpkeys.mit.edu --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-    rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
-    \
+    rm -f /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     # verify that the binary works
     gosu nobody true; 
@@ -34,9 +40,6 @@ RUN set -uex; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
     wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
     #wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
-    export GNUPGHOME="/install/gpg"; \
-    gpg --keyserver pgpkeys.mit.edu --recv-key 73855CE2D0A67B5A; \
-    gpg --keyserver pgpkeys.mit.edu --recv-key BA1CBB7D4C0D222CCF8A5C844B606607518830CF; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \

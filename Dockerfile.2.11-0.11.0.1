@@ -30,8 +30,8 @@ RUN set -uex; \
     # verify that the binary works
     gosu nobody true; 
 
-ARG KAFKA_VERSION={{kafka_version}}
-ARG SCALA_VERSION={{scala_version}}
+ARG KAFKA_VERSION=0.11.0.1
+ARG SCALA_VERSION=2.11
 
 RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \
