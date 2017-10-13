@@ -2,6 +2,7 @@ const Buffermaker = require('buffermaker')
 
 const API_VERSION = 0
 
+// functions are MIT - Copyright (c) 2015 sohu.com - https://github.com/SOHU-Co/kafka-node
 function encodeRequestHeader (clientId, correlationId, apiKey, apiVersion) {
   return new Buffermaker()
     .Int16BE(apiKey)
@@ -15,6 +16,8 @@ function encodeRequestWithLength (request) {
   return new Buffermaker().Int32BE(request.length).string(request).make();
 }
 
+
+// send an apiversions request and dump the response
 
 let req = encodeRequestHeader('meee', 0, 18)
 req = encodeRequestWithLength(req)
