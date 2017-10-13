@@ -1,11 +1,8 @@
 FROM openjdk:8-jre
 
-ARG KAFKA_VERSION=0.10.2.1
-ARG SCALA_VERSION=2.12
-
 RUN set -uex; \
     apt-get update; \
-    apt-get install netcat-openbsd wget ca-certificates -y; \
+    apt-get install netcat-openbsd wget ca-certificates xxd -y; \
     apt-get clean;
 
 ENV GOSU_VERSION 1.10
@@ -26,6 +23,9 @@ RUN set -uex; \
     # verify that the binary works
     gosu nobody true; 
 
+ARG KAFKA_VERSION=0.10.2.1
+ARG SCALA_VERSION=2.12
+
 RUN set -uex; \
     cd /tmp; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
@@ -39,8 +39,6 @@ RUN set -uex; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
     rm -rf /tmp/;
-
-
 
 # server.properties zookeeper.properties log4j.properties
 COPY ./config /kafka/config

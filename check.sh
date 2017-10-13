@@ -4,11 +4,21 @@ set -uex
 
 if [ "$1" == "kafka" ]; then 
   PORT=9092
-  res=$(echo ruok | nc localhost $PORT)
+  res=$(echo '0000000e001200000000000000046d656565' | xxd -r -p | nc localhost 9092 | xxd -l 218 -p)
   rc=$?
-  if [ "$rc" == "0" ]; then 
-    # kafka doesn't have a text interface, set the response to what zookeeper does
-    res="imok"
+  expected="000000d60000000000000000002200000000000300010000000500020000
+000200030000000400040000000000050000000000060000000300070001
+0001000800000003000900000003000a00000001000b00000002000c0000
+0001000d00000001000e00000001000f0000000100100000000100110000
+000000120000000100130000000200140000000100150000000000160000
+0000001700000000001800000000001900000000001a00000000001b0000
+0000001c00000000001d00000000001e00000000001f0000000000200000
+0000002100000000"
+  if [ "$res" != "$expected" ]; then 
+    # kafka doesn't have a text interface,
+    echo "Bad result: $res"
+    echo "$rc"
+    exit 1
   fi
 fi
 
@@ -16,11 +26,10 @@ if [ "$1" == "zookeeper" ]; then
   PORT=2181
   res=$(echo ruok | nc localhost $PORT)
   rc=$?
-fi
-
-if [ "$res" != "imok" ]; then
-  echo "Bad result: $res"
-  echo "$rc"
-  exit 1
+  if [ "$res" != "imok" ]; then
+    echo "Bad result: $res"
+    echo "$rc"
+    exit 1
+  fi
 fi
 
