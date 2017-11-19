@@ -20,33 +20,37 @@ fi
 cd "$rundir"
 
 run_build(){
-  run_template 2.11 0.10.2.1
-  run_build_version 2.12 0.10.2.1
-  run_template 2.11 0.11.0.1
-  run_build_version 2.12 0.11.0.1
+  run_template 9 2.11 0.10.2.1
+  run_build_version 9 2.12 0.10.2.1
+  run_template 9 2.11 0.11.0.1
+  run_build_version 9 2.12 0.11.0.1
   cp Dockerfile.2.12-0.11.0.1 Dockerfile
   docker build -f Dockerfile -t $IMG_TAG:latest .
 }
 
 run_build_version(){
-  build_scala_version=$1
-  build_kafka_version=$2
+  build_openjdk_version=$1
+  build_scala_version=$2
+  build_kafka_version=$3
   build_version=$build_scala_version-$build_kafka_version
-  run_template $build_scala_version $build_kafka_version
+  run_template $build_openjdk_version $build_scala_version $build_kafka_version
   docker build -f Dockerfile.$build_version -t $IMG_TAG:$build_version .
 }  
 
 
 run_template(){
-  template_scala_version=$1
-  template_kafka_version=$2
+  template_openjdk_version=$1
+  template_scala_version=$2
+  template_kafka_version=$3
   perl -pe 'BEGIN {
+      $openjdk_version=shift @ARGV;
       $scala_version=shift @ARGV;
       $kafka_version=shift @ARGV
     }
+    s/{{openjdk_version}}/$openjdk_version/;
     s/{{kafka_version}}/$kafka_version/;
     s/{{scala_version}}/$scala_version/;
-  ' $template_scala_version $template_kafka_version Dockerfile.template > Dockerfile.$template_scala_version-$template_kafka_version
+  ' $template_openjdk_version $template_scala_version $template_kafka_version Dockerfile.template > Dockerfile.$template_scala_version-$template_kafka_version
 }
 
 run_help(){
