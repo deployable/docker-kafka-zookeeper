@@ -1,17 +1,19 @@
-FROM openjdk:8-jre
+FROM openjdk:9-jre
 
 RUN set -uex; \
-    echo 'precedence ::ffff:0:0/96  100' > /etc/gai.conf; \
+    echo 'precedence ::ffff:0:0/96  100' >> /etc/gai.conf; \
     apt-get update; \
     apt-get install netcat-openbsd wget ca-certificates xxd -y; \
-    apt-get clean;
+    apt-get clean
 
-# gpg key servers are flakey :/
-RUN for key in \
+# gpg key servers can be flakey :/
+RUN set -uex; \
+    for key in \
       B42F6819007F00F88E364FD4036A9C25BF357DD4 \
       73855CE2D0A67B5A \
       BA1CBB7D4C0D222CCF8A5C844B606607518830CF; \
     do \
+      echo $key; \
       gpg --keyserver keys.gnupg.net --recv-keys $key \
         || gpg --keyserver pgp.mit.edu --recv-keys $key \
         || gpg --keyserver ha.pool.sks-keyservers.net --recv-keys $key; \
@@ -27,8 +29,8 @@ RUN set -uex; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -f /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
-    # verify that the binary works
-    gosu nobody true; 
+    # verify that the binary works \
+    gosu nobody true
 
 ARG KAFKA_VERSION=0.11.0.1
 ARG SCALA_VERSION=2.11
@@ -43,7 +45,7 @@ RUN set -uex; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
-    rm -rf /install;
+    rm -rf /install
 
 # server.properties zookeeper.properties log4j.properties
 COPY ./config /kafka/config
@@ -55,7 +57,7 @@ RUN set -uex; \
     mkdir -p /kafka/logs; \
     mkdir -p /data/kafka; \
     mkdir -p /data/zookeeper; \
-    chown -R kafka:kafka /kafka/logs /data; 
+    chown -R kafka:kafka /kafka/logs /data
 
 #USER kafka
 VOLUME [ "/kafka/logs", "/data" ]
