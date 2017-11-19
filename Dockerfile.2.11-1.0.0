@@ -35,7 +35,7 @@ RUN set -uex; \
     gosu nobody true
 
 ARG KAFKA_VERSION=1.0.0
-ARG SCALA_VERSION=2.12
+ARG SCALA_VERSION=2.11
 
 RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \

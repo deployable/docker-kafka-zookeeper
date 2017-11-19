@@ -22,9 +22,11 @@ cd "$rundir"
 run_build(){
   run_template 9 2.11 0.10.2.1
   run_build_version 9 2.12 0.10.2.1
-  run_template 9 2.11 0.11.0.1
-  run_build_version 9 2.12 0.11.0.1
-  cp Dockerfile.2.12-0.11.0.1 Dockerfile
+  run_template 9 2.11 0.11.0.2
+  run_build_version 9 2.12 0.11.0.2
+  run_template 9 2.11 1.0.0
+  run_build_version 9 2.12 1.0.0
+  cp Dockerfile.2.12-1.0.0 Dockerfile
   docker build -f Dockerfile -t $IMG_TAG:latest .
 }
 
