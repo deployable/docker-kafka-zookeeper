@@ -12,16 +12,19 @@ deployable/kafka:latest
 
 ### Latest Scala
 ```
+deployable/kafka:1.0.0
+deployable/kafka:0.11.0.2
 deployable/kafka:0.10.2.1
-deployable/kafka:0.11.0.1
 ```
 
 ### Specific versions
 ```
-deployable/kafka:2.11-0.11.0.1
-deployable/kafka:2.11-0.10.2.1
+deployable/kafka:2.12-1.0.0
+deployable/kafka:2.11-1.0.0
+deployable/kafka:2.12-0.11.0.2
+deployable/kafka:2.11-0.11.0.2
 deployable/kafka:2.12-0.10.2.1
-deployable/kafka:2.12-0.11.0.1
+deployable/kafka:2.11-0.10.2.1
 ```
 
 All images are based on `openjdk:8-jre`
