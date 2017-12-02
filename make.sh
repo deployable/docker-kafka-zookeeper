@@ -20,6 +20,7 @@ fi
 cd "$rundir"
 
 run_build(){
+  build_args=${DOCKER_BUILD_ARGS:-}
   run_template 8 2.11 0.10.2.1
   run_build_version 8 2.12 0.10.2.1
   run_template 8 2.11 0.11.0.2
@@ -27,16 +28,17 @@ run_build(){
   run_template 8 2.11 1.0.0
   run_build_version 9 2.12 1.0.0
   cp Dockerfile.2.12-1.0.0 Dockerfile
-  docker build -f Dockerfile -t $IMG_TAG:latest .
+  docker build $build_args -f Dockerfile -t $IMG_TAG:latest .
 }
 
 run_build_version(){
+  build_args=${DOCKER_BUILD_ARGS:-}
   build_openjdk_version=$1
   build_scala_version=$2
   build_kafka_version=$3
   build_version=$build_scala_version-$build_kafka_version
   run_template $build_openjdk_version $build_scala_version $build_kafka_version
-  docker build -f Dockerfile.$build_version -t $IMG_TAG:$build_version .
+  docker build $build_args -f Dockerfile.$build_version -t $IMG_TAG:$build_version .
 }  
 
 
