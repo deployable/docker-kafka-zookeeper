@@ -31,7 +31,6 @@ RUN set -uex; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -f /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
-    # verify that the binary works \
     gosu nobody true
 
 ARG KAFKA_VERSION=0.10.2.1
@@ -42,8 +41,7 @@ RUN set -uex; \
     cd /install; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
-    wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
-    #wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
+    wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
