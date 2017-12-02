@@ -7,7 +7,7 @@
 
 ### Latest
 ```
-deployable/kafka:latest
+deployable/kafka:latest - kafka:2.12-1.0.0
 ```
 
 ### Latest Scala
