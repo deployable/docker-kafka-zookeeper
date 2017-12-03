@@ -10,7 +10,7 @@
 deployable/kafka:latest - kafka:2.12-1.0.0
 ```
 
-### Latest Scala
+### Latest Scala - 2.12
 ```
 deployable/kafka:1.0.0
 deployable/kafka:0.11.0.2
@@ -29,6 +29,10 @@ deployable/kafka:2.11-0.10.2.1
 
 `deployable/kafka:2.12-1.0.0` is based on the `openjdk:9-jre` image.  All other images are based on `openjdk:8-jre`. 
 The JRE can be customised in the `make.sh` build scripts if you need a custom build with an earlier version.
+
+## Environment Variables
+
+`ADVERTISE_LISTENERS`
 
 ## Compose
 
