@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "buffermaker": "^1.2.0",
+    "kafka-node": "^2.6.1"
+  }
+}
