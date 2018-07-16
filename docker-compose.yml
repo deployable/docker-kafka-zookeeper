@@ -1,9 +1,9 @@
-version: "2.1"
+version: "2.2"
 
 services:
 
   zookeeper:
-    image: deployable/kafka:latest
+    image: deployable/kafka:2.12-1.1.0
     command: zookeeper
     ports:
      - "2181:2181"
@@ -15,10 +15,10 @@ services:
 #      start_period: 10s
 
   kafka:
-    image: deployable/kafka:latest
+    image: deployable/kafka:2.12-1.1.0
     command: kafka
     environment:
-      ADVERTISE_LISTENERS: 'localhost:9092'
+      ADVERTISE_LISTENERS: 'kafka:9092'
     ports:
      - "9092:9092"
     depends_on:
@@ -32,7 +32,7 @@ services:
 #      start_period: 20s
 
   kafka-setup:
-    image: deployable/kafka:latest
+    image: deployable/kafka:2.12-1.1.0
     command: setup
     depends_on:
       kafka:
