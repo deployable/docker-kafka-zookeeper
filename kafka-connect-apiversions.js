@@ -27,4 +27,5 @@ let socket = require('net').connect(9092, 'localhost')
 socket.on('connect', ()=> socket.write(req))
 socket.on('data', data => {
   console.log('got response', data.length, data.toString('hex'), data.readUInt32BE(0))
+  socket.end()
 })
