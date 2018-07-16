@@ -1,37 +1,4 @@
-FROM openjdk:{{openjdk_version}}-jre
-
-RUN set -uex; \
-    echo 'precedence ::ffff:0:0/96  100' >> /etc/gai.conf; \
-    apt-get update; \
-    apt-get install netcat-openbsd wget ca-certificates xxd -y; \
-    apt-get clean
-
-# gpg key servers can be flakey :/
-RUN set -uex; \
-    for key in \
-      B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-      73855CE2D0A67B5A \
-      461D2D1B577F40C58EC2FE060CF65F72E4609424 \
-      6370E6D65FE1D8437C4CF905A6ECA8953B417B9B \
-      BA1CBB7D4C0D222CCF8A5C844B606607518830CF; \
-    do \
-      echo $key; \
-      gpg --keyserver keys.gnupg.net --recv-keys $key \
-        || gpg --keyserver pgp.mit.edu --recv-keys $key \
-        || gpg --keyserver ha.pool.sks-keyservers.net --recv-keys $key; \
-    done
-
-ENV GOSU_VERSION 1.10
-RUN set -uex; \
-    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-    wget -O /usr/local/bin/gosu --progress=dot:giga \
-        "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-    wget -O /usr/local/bin/gosu.asc --progress=dot:giga \
-      "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-    gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-    rm -f /usr/local/bin/gosu.asc; \
-    chmod +x /usr/local/bin/gosu; \
-    gosu nobody true
+FROM deployable/openjdk:{{openjdk_version}}-jre
 
 ARG KAFKA_VERSION={{kafka_version}}
 ARG SCALA_VERSION={{scala_version}}
@@ -39,9 +6,12 @@ ARG SCALA_VERSION={{scala_version}}
 RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \
     cd /install; \
+    wget --progress=dot https://www-us.apache.org/dist/kafka/KEYS; \
+    gpg --import KEYS; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
-    wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
+#    wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
+    wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
     gpg --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
