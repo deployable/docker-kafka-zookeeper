@@ -1,7 +1,7 @@
-FROM deployable/openjdk:{{openjdk_version}}-jre
+FROM deployable/openjdk:8-jre
 
-ARG KAFKA_VERSION={{kafka_version}}
-ARG SCALA_VERSION={{scala_version}}
+ARG KAFKA_VERSION=1.0.2
+ARG SCALA_VERSION=2.11
 
 RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \
