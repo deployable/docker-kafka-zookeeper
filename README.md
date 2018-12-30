@@ -7,27 +7,24 @@
 
 ### Latest
 ```
-deployable/kafka:latest - kafka:2.12-2.0.0
+deployable/kafka:latest - kafka:2.12-2.1.0
 ```
 
 ### Latest Scala - 2.12
 ```
+deployable/kafka:2.1
 deployable/kafka:2.0
 deployable/kafka:1.1
-deployable/kafka:1.0
-deployable/kafka:0.11
 ```
 
 ### Specific versions
 ```
-deployable/kafka:2.12-2.0.0
-deployable/kafka:2.11-2.0.0
+deployable/kafka:2.12-2.1.0
+deployable/kafka:2.11-2.1.0
+deployable/kafka:2.12-2.0.1
+deployable/kafka:2.11-2.0.1
 deployable/kafka:2.12-1.1.1
 deployable/kafka:2.11-1.1.1
-deployable/kafka:2.12-1.0.2
-deployable/kafka:2.11-1.0.2
-deployable/kafka:2.12-0.11.0.2
-deployable/kafka:2.11-0.11.0.2
 ```
 
 ## Environment Variables
