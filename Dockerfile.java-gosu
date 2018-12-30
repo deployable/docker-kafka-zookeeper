@@ -4,7 +4,7 @@ FROM openjdk:$openjdk_version-jre
 RUN set -uex; \
     echo 'precedence ::ffff:0:0/96  100' >> /etc/gai.conf; \
     apt-get update; \
-    apt-get install gnupg gnupg-agent dirmngr netcat-openbsd wget ca-certificates xxd -y; \
+    apt-get install gnupg netcat-openbsd wget ca-certificates xxd -y; \
     apt-get clean
 
 # gpg key servers can be flakey :/

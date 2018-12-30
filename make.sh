@@ -87,6 +87,7 @@ run_test_version(){
   echo k:$KCID
   sleep 1
   ( docker logs -f $KCID & ) | grep -q 'INFO \[KafkaServer id=0\] started'
+  docker rm -f kafka-test-zk kafka-test-kafka || true
 }
 
 
