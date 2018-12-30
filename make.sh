@@ -21,8 +21,8 @@ cd "$rundir"
 
 run_build(){
   build_args=${DOCKER_BUILD_ARGS:-}
-  docker build $build_args --build-arg openjdk_version=8 -f Dockerfile.java-gosu -t $IMG_REPO:openjdk-8-jre .
-  docker build $build_args --build-arg openjdk_version=11 -f Dockerfile.java-gosu -t $IMG_REPO:openjdk-11-jre .
+  docker build $build_args -f Dockerfile.java-gosu-8 -t $IMG_REPO:openjdk-8-jre .
+  docker build $build_args -f Dockerfile.java-gosu-11 -t $IMG_REPO:openjdk-11-jre .
   #run_template 8 2.11 0.11.0.3
   #run_template 8 2.12 0.11.0.3
   run_template 8 2.11 1.0.2
