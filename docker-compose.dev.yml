@@ -1,0 +1,44 @@
+version: "2.2"
+
+services:
+
+  zookeeper:
+    image: deployable/kafka:2.12-2.1.0
+    command: zookeeper
+    ports:
+     - "2182:2181"
+#    healthcheck:
+#      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+#      interval: 30s
+#      timeout: 5s
+#      retries: 3
+##      start_period: 10s
+
+  kafka:
+    image: deployable/kafka:2.12-2.1.0
+    command: kafka
+    environment:
+      ADVERTISE_LISTENERS: 'kafka:9092'
+    ports:
+     - "9093:9092"
+    depends_on:
+      - zookeeper
+#    depends_on:
+#      zookeeper:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "/kafka/check.sh", "kafka" ]
+#      interval: 30s
+#      timeout: 5s
+#      retries: 3
+##      start_period: 20s
+
+#  kafka-setup:
+#    image: deployable/kafka:2.12-2.1.0
+#    command: setup
+#    depends_on:
+#      kafka:
+#        condition: service_healthy
+#    environment:
+#      KAFKA_TOPIC: my-test-topic
+
