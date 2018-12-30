@@ -31,7 +31,7 @@ run_build(){
   run_build_version 8 2.12 1.1.1
   run_template 8 2.11 2.0.1
   run_build_version 8 2.12 2.0.1
-  run_template 11 2.11 2.1.0
+  run_template 8 2.11 2.1.0
   run_build_version 11 2.12 2.1.0
   cp Dockerfile.2.12-2.1.0 Dockerfile
   docker build $build_args -f Dockerfile -t $IMG_REPO:latest .
