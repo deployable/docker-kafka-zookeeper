@@ -25,8 +25,8 @@ run_build(){
   docker build $build_args --build-arg openjdk_version=11 -f Dockerfile.java-gosu -t $IMG_NAMESPACE/openjdk:11-jre .
   #run_template 8 2.11 0.11.0.3
   #run_template 8 2.12 0.11.0.3
-  #run_template 8 2.11 1.0.2
-  #run_build_version 8 2.12 1.0.2
+  run_template 8 2.11 1.0.2
+  run_build_version 8 2.12 1.0.2
   run_template 8 2.11 1.1.1
   run_build_version 8 2.12 1.1.1
   run_template 8 2.11 2.0.1
@@ -78,11 +78,15 @@ run_test_version(){
   docker rm -f kafka-test-zk kafka-test-kafka || true
   docker network rm kafka-test || true
   docker network create kafka-test
-  CID=$(docker run --network kafka-test --name kafka-test-zk -d $IMG_REPO:$build_version zookeeper)
+  ZCID=$(docker run --network kafka-test --name kafka-test-zk -d $IMG_REPO:$build_version zookeeper)
+  echo zk:$ZCID
   sleep 1
-  ( docker logs -f $CID & ) | grep -q "INFO binding to port "
-  docker run --network kafka-test --name kafka-test-kafka $IMG_REPO:$build_version kafka \
-    --override zookeeper.connect=kafka-test-zk:2181
+  ( docker logs -f $ZCID & ) | grep -q "INFO binding to port "
+  KCID=$(docker run -d --network kafka-test --name kafka-test-kafka $IMG_REPO:$build_version kafka \
+    --override zookeeper.connect=kafka-test-zk:2181)
+  echo k:$KCID
+  sleep 1
+  ( docker logs -f $KCID & ) | grep -q 'INFO \[KafkaServer id=0\] started'
 }
 
 
@@ -100,4 +104,4 @@ case $cmd in
   "run")       run_run "$@";;
   '-h'|'--help'|'h'|'help') run_help;;
 esac
-
+ 
