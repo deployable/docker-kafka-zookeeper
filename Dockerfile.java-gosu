@@ -4,7 +4,7 @@ FROM openjdk:$openjdk_version-jre
 RUN set -uex; \
     echo 'precedence ::ffff:0:0/96  100' >> /etc/gai.conf; \
     apt-get update; \
-    apt-get install netcat-openbsd wget ca-certificates xxd -y; \
+    apt-get install gnupg gnupg-agent dirmngr netcat-openbsd wget ca-certificates xxd -y; \
     apt-get clean
 
 # gpg key servers can be flakey :/
@@ -13,19 +13,20 @@ RUN set -uex; \
       B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     do \
       echo $key; \
-      gpg --keyserver keys.gnupg.net --recv-keys $key \
-        || gpg --keyserver pgp.mit.edu --recv-keys $key \
-        || gpg --keyserver ha.pool.sks-keyservers.net --recv-keys $key; \
+      gpg --no-tty --keyserver keyserver.ubuntu.com --recv-keys $key \
+       || gpg --no-tty --keyserver keys.gnupg.net --recv-keys $key \
+       || gpg --no-tty --keyserver pgp.mit.edu --recv-keys $key \
+       || gpg --no-tty --keyserver ha.pool.sks-keyservers.net --recv-keys $key; \
     done
 
 ENV GOSU_VERSION 1.10
 RUN set -uex; \
     dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
     wget -O /usr/local/bin/gosu --progress=dot:giga \
-        "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+      "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
     wget -O /usr/local/bin/gosu.asc --progress=dot:giga \
       "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-    gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+    gpg --no-tty --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -f /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     gosu nobody true

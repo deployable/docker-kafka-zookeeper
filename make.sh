@@ -22,16 +22,18 @@ cd "$rundir"
 run_build(){
   build_args=${DOCKER_BUILD_ARGS:-}
   docker build $build_args --build-arg openjdk_version=8 -f Dockerfile.java-gosu -t $IMG_NAMESPACE/openjdk:8-jre .
-  #docker build $build_args --build-arg openjdk_version=10 -f Dockerfile.java-gosu -t $IMG_NAMESPACE/openjdk:10-jre .
-  run_template 8 2.11 0.11.0.3
-  run_template 8 2.12 0.11.0.3
-  run_template 8 2.11 1.0.2
-  run_build_version 8 2.12 1.0.2
+  docker build $build_args --build-arg openjdk_version=11 -f Dockerfile.java-gosu -t $IMG_NAMESPACE/openjdk:11-jre .
+  #run_template 8 2.11 0.11.0.3
+  #run_template 8 2.12 0.11.0.3
+  #run_template 8 2.11 1.0.2
+  #run_build_version 8 2.12 1.0.2
   run_template 8 2.11 1.1.1
   run_build_version 8 2.12 1.1.1
-  run_template 8 2.11 2.0.0
-  run_build_version 8 2.12 2.0.0
-  cp Dockerfile.2.12-2.0.0 Dockerfile
+  run_template 8 2.11 2.0.1
+  run_build_version 8 2.12 2.0.1
+  run_template 11 2.11 2.1.0
+  run_build_version 11 2.12 2.1.0
+  cp Dockerfile.2.12-2.1.0 Dockerfile
   docker build $build_args -f Dockerfile -t $IMG_TAG:latest .
 }
 

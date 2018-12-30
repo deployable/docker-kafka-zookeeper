@@ -1,7 +1,7 @@
 FROM deployable/openjdk:8-jre
 
-ARG KAFKA_VERSION=1.1.1
-ARG SCALA_VERSION=2.11
+ARG KAFKA_VERSION=2.0.1
+ARG SCALA_VERSION=2.12
 
 RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \

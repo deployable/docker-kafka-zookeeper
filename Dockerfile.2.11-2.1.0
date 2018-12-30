@@ -1,6 +1,6 @@
-FROM deployable/openjdk:8-jre
+FROM deployable/openjdk:11-jre
 
-ARG KAFKA_VERSION=1.1.1
+ARG KAFKA_VERSION=2.1.0
 ARG SCALA_VERSION=2.11
 
 RUN set -uex; \

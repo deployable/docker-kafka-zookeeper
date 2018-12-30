@@ -7,12 +7,12 @@ RUN set -uex; \
     mkdir -p -m 700 /install/gpg; \
     cd /install; \
     wget --progress=dot https://kafka.apache.org/KEYS; \
-    gpg --import KEYS; \
+    gpg --no-tty --import KEYS; \
     label="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"; \
     wget --progress=dot https://www-us.apache.org/dist/kafka/$KAFKA_VERSION/$label.tgz.asc; \
 #    wget --progress=dot:giga http://ftp.jaist.ac.jp/pub/apache/kafka/$KAFKA_VERSION/$label.tgz; \
     wget --progress=dot:giga http://apache.mirror.digitalpacific.com.au/kafka/$KAFKA_VERSION/$label.tgz; \
-    gpg --batch --verify $label.tgz.asc $label.tgz; \
+    gpg --no-tty --batch --verify $label.tgz.asc $label.tgz; \
     tar -xzf $label.tgz; \
     mv $label /kafka; \
     rm -rf /install
