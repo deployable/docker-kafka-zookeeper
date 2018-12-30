@@ -1,4 +1,4 @@
-FROM deployable/openjdk:11-jre
+FROM deployable/kafka:openjdk-11-jre
 
 ARG KAFKA_VERSION=2.1.0
 ARG SCALA_VERSION=2.12

@@ -1,4 +1,4 @@
-FROM deployable/openjdk:{{openjdk_version}}-jre
+FROM deployable/kafka:openjdk-{{openjdk_version}}-jre
 
 ARG KAFKA_VERSION={{kafka_version}}
 ARG SCALA_VERSION={{scala_version}}
