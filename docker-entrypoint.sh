@@ -1,16 +1,19 @@
 #!/bin/sh
 
-ARG="${@:-kafka}"
+set -uex
+
+ARG="${1:-kafka}"
+shift
 
 kafka(){
-  if [ -n "$ADVERTISE_LISTENERS" ]; then 
+  if [ -n "${ADVERTISE_LISTENERS:-}" ]; then 
     sed -i '/s/advertised.listeners=.+/'${ADVERTISE_LISTENERS}'/' /kafka/config/server.properties
   fi
-  exec /usr/local/bin/gosu 20029:20029 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties
+  exec /usr/local/bin/gosu 20029:20029 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties "$@"
 }
 
 zookeeper(){
-  exec /usr/local/bin/gosu 20029:20029 /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties
+  exec /usr/local/bin/gosu 20029:20029 /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties "$@"
 }
 
 setup(){
@@ -26,6 +29,6 @@ setup(){
   fi
 }
 
-$ARG
+$ARG "$@"
 exit $?
 

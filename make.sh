@@ -4,7 +4,7 @@ set -ue
 
 IMG_NAMESPACE=deployable
 IMG_NAME=kafka
-IMG_TAG=$IMG_NAMESPACE/$IMG_NAME
+IMG_REPO=$IMG_NAMESPACE/$IMG_NAME
 CONTAINER_NAME=kafka
 
 rundir=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
@@ -34,7 +34,7 @@ run_build(){
   run_template 11 2.11 2.1.0
   run_build_version 11 2.12 2.1.0
   cp Dockerfile.2.12-2.1.0 Dockerfile
-  docker build $build_args -f Dockerfile -t $IMG_TAG:latest .
+  docker build $build_args -f Dockerfile -t $IMG_REPO:latest .
 }
 
 run_build_version(){
@@ -44,7 +44,7 @@ run_build_version(){
   build_kafka_version=$3
   build_version=$build_scala_version-$build_kafka_version
   run_template $build_openjdk_version $build_scala_version $build_kafka_version
-  docker build $build_args -f Dockerfile.$build_version -t $IMG_TAG:$build_version .
+  docker build $build_args -f Dockerfile.$build_version -t $IMG_REPO:$build_version .
 }  
 
 
@@ -63,6 +63,29 @@ run_template(){
   ' $template_openjdk_version $template_scala_version $template_kafka_version Dockerfile.template > Dockerfile.$template_scala_version-$template_kafka_version
 }
 
+run_test(){
+  run_test_version 8 2.12 1.1.1
+  run_test_version 8 2.12 2.0.1
+  run_test_version 11 2.12 2.1.0
+}
+
+run_test_version(){
+  build_openjdk_version=$1
+  build_scala_version=$2
+  build_kafka_version=$3
+  build_version=$build_scala_version-$build_kafka_version
+
+  docker rm -f kafka-test-zk kafka-test-kafka || true
+  docker network rm kafka-test || true
+  docker network create kafka-test
+  CID=$(docker run --network kafka-test --name kafka-test-zk -d $IMG_REPO:$build_version zookeeper)
+  sleep 1
+  ( docker logs -f $CID & ) | grep -q "INFO binding to port "
+  docker run --network kafka-test --name kafka-test-kafka $IMG_REPO:$build_version kafka \
+    --override zookeeper.connect=kafka-test-zk:2181
+}
+
+
 run_help(){
   echo "Commands:"
   awk '/  ".*"/{ print "  "substr($1,2,length($1)-3) }' make.sh
@@ -73,6 +96,7 @@ set -x
 case $cmd in
   "build")     run_build "$@";;
   "template")  run_template "$@";;
+  "test")      run_test "$@";;
   "run")       run_run "$@";;
   '-h'|'--help'|'h'|'help') run_help;;
 esac
