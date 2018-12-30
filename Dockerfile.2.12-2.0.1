@@ -30,7 +30,7 @@ RUN set -uex; \
     chown -R kafka:kafka /kafka/logs /data
 
 #USER kafka
-VOLUME [ "/kafka/logs", "/data" ]
+#VOLUME [ "/kafka/logs", "/data" ]
 WORKDIR /kafka
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["kafka"]
