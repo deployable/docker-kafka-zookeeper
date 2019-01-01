@@ -9,7 +9,6 @@ kafka(){
   if [ -n "${ADVERTISE_LISTENERS:-}" ]; then 
     sed -i '/s/advertised.listeners=.+/'${ADVERTISE_LISTENERS}'/' /kafka/config/server.properties
   fi
-  sleep 6
   exec /usr/local/bin/gosu 20029:20029 /kafka/bin/kafka-server-start.sh /kafka/config/server.properties "$@"
 }
 
@@ -19,7 +18,6 @@ zookeeper(){
 }
 
 health(){
-  sleep 12
   exec /usr/local/bin/gosu 20028:20028 /kafka/bin/kafka-health-check "$@"
 }
 

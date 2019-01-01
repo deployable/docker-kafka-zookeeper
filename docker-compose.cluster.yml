@@ -138,3 +138,7 @@ services:
 #    environment:
 #      KAFKA_TOPIC: my-test-topic
 
+  kafka-manager:
+    image: docker.io/yahoo/kafka-manager:1.3.3.22
+
+
