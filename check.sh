@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -uex
+set -ue
 
 KAFKA_PORT=${KAFKA_PORT:-9092}
 ZK_PORT=${ZK_PORT:-2181}
