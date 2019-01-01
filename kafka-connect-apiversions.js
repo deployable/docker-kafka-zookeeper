@@ -1,5 +1,8 @@
 const Buffermaker = require('buffermaker')
 
+// https://cwiki.apache.org/confluence/display/KAFKA/A+Guide+To+The+Kafka+Protocol
+
+const kafka_port = 9093
 const API_VERSION = 0
 
 // functions are MIT - Copyright (c) 2015 sohu.com - https://github.com/SOHU-Co/kafka-node
@@ -18,14 +21,15 @@ function encodeRequestWithLength (request) {
 
 
 // send an apiversions request and dump the response
+// 18 is an `ApiVersions` request - https://kafka.apache.org/protocol#protocol_api_keys
 
-let req = encodeRequestHeader('meee', 0, 18)
+let req = encodeRequestHeader('meee', 1, 18)
 req = encodeRequestWithLength(req)
 console.log(req.toString('hex'))
 
-let socket = require('net').connect(9092, 'localhost')
+let socket = require('net').connect(kafka_port, 'localhost')
 socket.on('connect', ()=> socket.write(req))
 socket.on('data', data => {
-  console.log('got response', data.length, data.toString('hex'), data.readUInt32BE(0))
+  console.log('got response of %s\n%s\n%s', data.length, data.toString('hex'), data.readUInt32BE(0))
   socket.end()
 })

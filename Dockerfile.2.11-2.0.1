@@ -17,6 +17,13 @@ RUN set -uex; \
     mv $label /kafka; \
     rm -rf /install
 
+RUN set -uex; \
+    mkdir /install && cd /install; \
+    wget --progress=dot:mega https://github.com/andreas-schroeder/kafka-health-check/releases/download/v0.1.0/kafka-health-check_0.1.0_linux_amd64.tar.gz; \
+    tar -xvf kafka-health-check_0.1.0_linux_amd64.tar.gz; \
+    mv kafka-health-check /kafka/bin/; \
+    rm -rf /install;
+
 # server.properties zookeeper.properties log4j.properties
 COPY ./config /kafka/config
 COPY docker-entrypoint.sh /entrypoint.sh

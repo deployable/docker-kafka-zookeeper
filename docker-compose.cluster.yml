@@ -1,0 +1,140 @@
+version: "2.2"
+
+services:
+
+# Zookeeper
+
+  zookeeper1:
+    image: deployable/kafka:2.12-2.1.0
+    command: zookeeper
+    environment:
+      MYID: 1
+    ports:
+     - "2182:2181"
+    healthcheck:
+      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+#      start_period: 10s
+
+  zookeeper2:
+    image: deployable/kafka:2.12-2.1.0
+    command: zookeeper
+    environment:
+      MYID: 2
+    ports:
+     - "2183:2181"
+    healthcheck:
+      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+#      start_period: 10s
+
+  zookeeper3:
+    image: deployable/kafka:2.12-2.1.0
+    command: zookeeper
+    environment:
+      MYID: 3
+    ports:
+     - "2184:2181"
+    healthcheck:
+      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+#      start_period: 10s
+
+# Kafka
+
+  kafka1:
+    image: deployable/kafka:2.12-2.1.0
+    command: >+
+      kafka
+       --override broker.id=11
+       --override advertised.host=kafka1
+       --override advertised.listeners=PLAINTEXT://kafka1:9092
+       --override zookeeper.connect=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+    environment:
+      ADVERTISE_LISTENERS: 'kafka1:9092'
+    ports:
+     - "9093:9092"
+    depends_on:
+      zookeeper1:
+        condition: service_healthy
+
+  kafka2:
+    image: deployable/kafka:2.12-2.1.0
+    command: >+
+      kafka
+       --override broker.id=22
+       --override advertised.host=kafka2
+       --override advertised.listeners=PLAINTEXT://kafka2:9092
+       --override zookeeper.connect=zookeeper2:2181,zookeeper1:2181,zookeeper3:2181
+    environment:
+      ADVERTISE_LISTENERS: 'kafka2:9092'
+    ports:
+     - "9094:9092"
+    depends_on:
+      zookeeper2:
+        condition: service_healthy
+
+  kafka3:
+    image: deployable/kafka:2.12-2.1.0
+    command: >+
+      kafka
+       --override broker.id=33
+       --override advertised.host=kafka3
+       --override advertised.listeners=PLAINTEXT://kafka3:9092
+       --override zookeeper.connect=zookeeper3:2181,zookeeper1:2181,zookeeper2:2181
+    environment:
+      ADVERTISE_LISTENERS: 'kafka3:9092'
+    ports:
+     - "9095:9092"
+    depends_on:
+      #- zookeeper3
+      zookeeper3:
+        condition: service_healthy
+
+#    depends_on:
+#      zookeeper:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "/kafka/check.sh", "kafka" ]
+#      interval: 30s
+#      timeout: 5s
+#      retries: 3
+##      start_period: 20s
+
+
+# Health
+
+  kafka-health1:
+    image: deployable/kafka:2.12-2.1.0
+    command: "health -broker-host kafka1 -zookeeper zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 -broker-id 11"
+    depends_on:
+    - kafka1
+
+  kafka-health2:
+    image: deployable/kafka:2.12-2.1.0
+    command: "health -broker-host kafka2 -zookeeper zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 -broker-id 22"
+    depends_on:
+    - kafka2
+
+  kafka-health3:
+    image: deployable/kafka:2.12-2.1.0
+    command: "health -broker-host kafka3 -zookeeper zookeeper1:2181,zookeeper2:2181,zookeeper3:2181 -broker-id 33"
+    depends_on:
+    - kafka3
+
+
+#  kafka-setup:
+#    image: deployable/kafka:2.12-2.1.0
+#    command: setup
+#    depends_on:
+#      kafka:
+#        condition: service_healthy
+#    environment:
+#      KAFKA_TOPIC: my-test-topic
+
